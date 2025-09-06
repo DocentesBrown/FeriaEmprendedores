@@ -11,38 +11,32 @@
       --color3: #24496e;
       --color4: #f3efdc;
     }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: var(--color4);
       color: var(--color3);
     }
-
     header {
       background: var(--color2);
       color: white;
       padding: 10px;
       text-align: center;
     }
-
     header img {
       max-height: 60px;
       display: block;
       margin: 0 auto 10px;
     }
-
     h1 {
       margin: 0;
       font-size: 1.4rem;
     }
-
     .filters {
       display: flex;
       justify-content: center;
       margin: 15px;
     }
-
     .filters select {
       padding: 10px;
       border-radius: 8px;
@@ -51,14 +45,12 @@
       width: 90%;
       max-width: 400px;
     }
-
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
       gap: 10px;
       padding: 10px;
     }
-
     .card {
       background: white;
       border-radius: 3%;
@@ -68,11 +60,9 @@
       cursor: pointer;
       transition: transform 0.2s;
     }
-
     .card:hover {
       transform: scale(1.05);
     }
-
     .card.horizontal {
       display: flex;
       align-items: center;
@@ -81,13 +71,10 @@
       padding: 12px;
       margin-bottom: 10px;
     }
-
     .card.horizontal h3 {
       margin: 0 0 0 10px;
       font-size: 1rem;
     }
-
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -98,7 +85,6 @@
       justify-content: center;
       align-items: center;
     }
-
     .modal-content {
       background: white;
       padding: 20px;
@@ -107,12 +93,10 @@
       width: 90%;
       box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
     }
-
     .modal-content h2 {
       margin-top: 0;
       color: var(--color2);
     }
-
     .modal-content a {
       display: block;
       margin: 8px 0;
@@ -120,7 +104,6 @@
       text-decoration: none;
       font-weight: bold;
     }
-
     .close {
       float: right;
       font-size: 1.2rem;
@@ -157,29 +140,26 @@
   </div>
 
   <script>
-    const SHEET_ID = "1B9t5EufUO848bFwv7tLJMt6mnh3qyeHXrZf5PKfCXuQ";
-    const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFrFDHPl6jTxhAPO30GrSiWv5hzN_I9cGHRI8ks2UDQAoyPd15DG2zKlt3G0bkgyDwAufS2fLCqnat/pub?gid=0&single=true&output=csv";
 
     let data = [];
-    let currentView = "rubros";
 
     async function loadData() {
       const res = await fetch(SHEET_URL);
       const text = await res.text();
-      const json = JSON.parse(text.substr(47).slice(0, -2));
-      data = json.table.rows.map(r => ({
-        emprendimiento: r.c[0]?.v || "",
-        rubro: r.c[1]?.v || "",
-        instagram: r.c[2]?.v || "",
-        whatsapp: r.c[3]?.v || "",
-        descuento: r.c[4]?.v || "",
-        docente: r.c[5]?.v || ""
-      }));
+      const rows = text.split("\n").map(r => r.split(","));
+      data = rows.slice(1).map(r => ({
+        emprendimiento: r[0]?.trim(),
+        rubro: r[1]?.trim(),
+        instagram: r[2]?.trim(),
+        whatsapp: r[3]?.trim(),
+        descuento: r[4]?.trim(),
+        docente: r[5]?.trim()
+      })).filter(d => d.emprendimiento);
       renderRubros();
     }
 
     function renderRubros() {
-      currentView = "rubros";
       const container = document.getElementById("cards");
       container.className = "grid";
       const rubros = [...new Set(data.map(d => d.rubro))].sort();
@@ -202,7 +182,6 @@
     }
 
     function renderEmprendedoresAll() {
-      currentView = "emprendedores";
       const container = document.getElementById("cards");
       container.className = "";
       const emps = [...data].sort((a,b)=>a.emprendimiento.localeCompare(b.emprendimiento));
