@@ -10,6 +10,7 @@
       --color2: #4d3069;
       --color3: #24496e;
       --color4: #f3efdc;
+      --shadow: rgba(0,0,0,0.2);
     }
     body {
       margin: 0;
@@ -20,17 +21,41 @@
     header {
       background: var(--color2);
       color: white;
-      padding: 10px;
+      padding: 15px;
       text-align: center;
     }
     header img {
-      max-height: 60px;
+      max-height: 70px;
       display: block;
       margin: 0 auto 10px;
     }
     h1 {
       margin: 0;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
+    }
+    .start-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 80vh;
+      text-align: center;
+      padding: 20px;
+    }
+    .start-screen button {
+      margin-top: 20px;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 12px;
+      background: var(--color1);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 10px var(--shadow);
+      transition: transform 0.2s;
+    }
+    .start-screen button:hover {
+      transform: scale(1.05);
     }
     .filters {
       display: flex;
@@ -47,32 +72,34 @@
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 15px;
       padding: 10px;
     }
     .card {
       background: white;
-      border-radius: 3%;
-      padding: 15px;
+      border-radius: 12px;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0px 2px 6px rgba(0,0,0,0.15);
+      box-shadow: 0 4px 12px var(--shadow);
       cursor: pointer;
-      transition: transform 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
     .card:hover {
-      transform: scale(1.05);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 18px var(--shadow);
     }
     .card.horizontal {
       display: flex;
       align-items: center;
       justify-content: flex-start;
       border-radius: 12px;
-      padding: 12px;
+      padding: 15px;
       margin-bottom: 10px;
+      box-shadow: 0 4px 12px var(--shadow);
     }
     .card.horizontal h3 {
-      margin: 0 0 0 10px;
+      margin: 0 0 0 15px;
       font-size: 1rem;
     }
     .modal {
@@ -87,22 +114,24 @@
     }
     .modal-content {
       background: white;
-      padding: 20px;
-      border-radius: 12px;
+      padding: 25px;
+      border-radius: 16px;
       max-width: 400px;
       width: 90%;
-      box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 6px 20px var(--shadow);
     }
     .modal-content h2 {
       margin-top: 0;
       color: var(--color2);
+      text-align: center;
     }
-    .modal-content a {
+    .modal-content a, .modal-content p {
       display: block;
-      margin: 8px 0;
+      margin: 10px 0;
       color: var(--color3);
       text-decoration: none;
       font-weight: bold;
+      text-align: center;
     }
     .close {
       float: right;
@@ -118,14 +147,21 @@
     <h1>Feria Virtual de Emprendedores</h1>
   </header>
 
-  <div class="filters">
-    <select id="filter">
-      <option value="rubros">Orden alfabético - Rubros</option>
-      <option value="emprendedores">Orden alfabético - Emprendedores</option>
-    </select>
+  <div id="startScreen" class="start-screen">
+    <img src="logoferia.png" alt="Logo Feria" style="max-width:200px; margin-bottom:20px;">
+    <button id="enterApp">Ingresar a la App</button>
   </div>
 
-  <div id="cards" class="grid"></div>
+  <div id="appContent" style="display:none;">
+    <div class="filters">
+      <select id="filter">
+        <option value="rubros">Orden alfabético - Rubros</option>
+        <option value="emprendedores">Orden alfabético - Emprendedores</option>
+      </select>
+    </div>
+
+    <div id="cards" class="grid"></div>
+  </div>
 
   <!-- Modal -->
   <div id="modal" class="modal">
@@ -134,6 +170,7 @@
       <h2 id="modalName"></h2>
       <a id="modalInsta" href="#" target="_blank">Instagram</a>
       <a id="modalWpp" href="#" target="_blank">WhatsApp</a>
+      <p id="modalNumero"></p>
       <p id="modalDescuento"></p>
       <p id="modalDocente"></p>
     </div>
@@ -192,12 +229,27 @@
       `).join("");
     }
 
+    function buildWhatsAppLink(number) {
+      if (!number) return "#";
+      number = number.replace(/[^0-9]/g, "");
+      if (!number.startsWith("549")) number = "549" + number;
+      return `https://wa.me/${number}`;
+    }
+
+    function formatNumber(number) {
+      if (!number) return "";
+      number = number.replace(/[^0-9]/g, "");
+      if (number.startsWith("549")) number = number.slice(3);
+      return "+54 " + number.slice(0,2) + " " + number.slice(2,6) + "-" + number.slice(6);
+    }
+
     function showModal(name) {
       const empr = data.find(d => d.emprendimiento === name);
       if (!empr) return;
       document.getElementById("modalName").textContent = empr.emprendimiento;
       document.getElementById("modalInsta").href = empr.instagram.startsWith("http") ? empr.instagram : `https://instagram.com/${empr.instagram.replace("@","")}`;
-      document.getElementById("modalWpp").href = empr.whatsapp.startsWith("http") ? empr.whatsapp : `https://wa.me/${empr.whatsapp.replace(/[^0-9]/g,"")}`;
+      document.getElementById("modalWpp").href = empr.whatsapp.startsWith("http") ? empr.whatsapp : buildWhatsAppLink(empr.whatsapp);
+      document.getElementById("modalNumero").textContent = `Número: ${formatNumber(empr.whatsapp)}`;
       document.getElementById("modalDescuento").textContent = `Descuento: ${empr.descuento}`;
       document.getElementById("modalDocente").textContent = `Docente/Auxiliar: ${empr.docente}`;
       document.getElementById("modal").style.display = "flex";
@@ -218,7 +270,11 @@
       }
     };
 
-    loadData();
+    document.getElementById("enterApp").onclick = () => {
+      document.getElementById("startScreen").style.display = "none";
+      document.getElementById("appContent").style.display = "block";
+      loadData();
+    };
   </script>
 </body>
 </html>
