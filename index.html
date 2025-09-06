@@ -111,31 +111,46 @@
       background: rgba(0,0,0,0.5);
       justify-content: center;
       align-items: center;
+      padding: 10px;
     }
     .modal-content {
       background: white;
       padding: 25px;
       border-radius: 16px;
-      max-width: 400px;
-      width: 90%;
+      max-width: 350px;
+      width: 100%;
       box-shadow: 0 6px 20px var(--shadow);
+      text-align: center;
     }
     .modal-content h2 {
       margin-top: 0;
       color: var(--color2);
-      text-align: center;
     }
-    .modal-content a, .modal-content p {
+    .modal-content .btn {
       display: block;
+      width: 100%;
+      padding: 12px 0;
       margin: 10px 0;
-      color: var(--color3);
-      text-decoration: none;
+      border: none;
+      border-radius: 10px;
       font-weight: bold;
-      text-align: center;
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1rem;
+    }
+    .btn-instagram { background: #E1306C; }
+    .btn-whatsapp { background: #25D366; }
+    .modal-content p {
+      margin: 10px 0;
+      font-weight: bold;
+      color: var(--color3);
     }
     .close {
-      float: right;
-      font-size: 1.2rem;
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 1.5rem;
       cursor: pointer;
       color: var(--color1);
     }
@@ -168,9 +183,8 @@
     <div class="modal-content">
       <span id="closeModal" class="close">&times;</span>
       <h2 id="modalName"></h2>
-      <a id="modalInsta" href="#" target="_blank">Instagram</a>
-      <a id="modalWpp" href="#" target="_blank">WhatsApp</a>
-      <p id="modalNumero"></p>
+      <a id="modalInsta" class="btn btn-instagram" href="#" target="_blank">Instagram</a>
+      <a id="modalWpp" class="btn btn-whatsapp" href="#" target="_blank">WhatsApp</a>
       <p id="modalDescuento"></p>
       <p id="modalDocente"></p>
     </div>
@@ -236,22 +250,14 @@
       return `https://wa.me/${number}`;
     }
 
-    function formatNumber(number) {
-      if (!number) return "";
-      number = number.replace(/[^0-9]/g, "");
-      if (number.startsWith("549")) number = number.slice(3);
-      return "+54 " + number.slice(0,2) + " " + number.slice(2,6) + "-" + number.slice(6);
-    }
-
     function showModal(name) {
       const empr = data.find(d => d.emprendimiento === name);
       if (!empr) return;
       document.getElementById("modalName").textContent = empr.emprendimiento;
       document.getElementById("modalInsta").href = empr.instagram.startsWith("http") ? empr.instagram : `https://instagram.com/${empr.instagram.replace("@","")}`;
       document.getElementById("modalWpp").href = empr.whatsapp.startsWith("http") ? empr.whatsapp : buildWhatsAppLink(empr.whatsapp);
-      document.getElementById("modalNumero").textContent = `Número: ${formatNumber(empr.whatsapp)}`;
-      document.getElementById("modalDescuento").textContent = `Descuento: ${empr.descuento}`;
-      document.getElementById("modalDocente").textContent = `Docente/Auxiliar: ${empr.docente}`;
+      document.getElementById("modalDescuento").textContent = `Promoción: ${empr.descuento}`;
+      document.getElementById("modalDocente").textContent = `Responsable: ${empr.docente}`;
       document.getElementById("modal").style.display = "flex";
     }
 
