@@ -33,13 +33,15 @@
       margin: 0;
       font-size: 1.5rem;
     }
+    /* Pantalla de inicio con colores partidos */
     .start-screen {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 80vh;
+      height: 100vh;
       text-align: center;
+      background: linear-gradient(to top, var(--color1) 50%, var(--color4) 50%);
       padding: 20px;
     }
     .start-screen button {
@@ -48,7 +50,7 @@
       font-size: 1.2rem;
       border: none;
       border-radius: 12px;
-      background: var(--color1);
+      background: var(--color2);
       color: white;
       cursor: pointer;
       box-shadow: 0 4px 10px var(--shadow);
@@ -102,17 +104,6 @@
       margin: 0 0 0 15px;
       font-size: 1rem;
     }
-    .back-btn {
-      margin: 10px;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 8px;
-      background: var(--color3);
-      color: white;
-      font-size: 0.9rem;
-      cursor: pointer;
-      box-shadow: 0 3px 6px var(--shadow);
-    }
     .modal {
       display: none;
       position: fixed;
@@ -160,32 +151,25 @@
     }
     .close {
       position: absolute;
-      top: 10px;
-      right: 15px;
+      top: 15px;
+      right: 20px;
       font-size: 1.5rem;
       cursor: pointer;
       color: var(--color1);
     }
-    .subscribe {
+    /* Botón flotante de suscripción */
+    #subscribeBtn {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--color2);
-      text-align: center;
-      padding: 15px;
+      bottom: 20px;
+      right: 20px;
+      background: #25D366;
       color: white;
-      box-shadow: 0 -3px 6px var(--shadow);
-    }
-    .subscribe a {
-      display: inline-block;
-      margin-top: 8px;
-      padding: 10px 20px;
-      background: var(--color1);
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
+      padding: 15px 20px;
+      border-radius: 50px;
       font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 12px var(--shadow);
+      z-index: 2000;
     }
   </style>
 </head>
@@ -207,7 +191,6 @@
         <option value="emprendedores">Orden alfabético - Emprendedores</option>
       </select>
     </div>
-    <div id="backContainer"></div>
     <div id="cards" class="grid"></div>
   </div>
 
@@ -220,32 +203,18 @@
       <a id="modalWpp" class="btn btn-whatsapp" href="#" target="_blank">WhatsApp</a>
       <p id="modalDescuento"></p>
       <p id="modalDocente"></p>
-      <button class="back-btn" onclick="closeModal()">Volver</button>
     </div>
   </div>
 
-  <!-- Suscripción -->
-  <div class="subscribe">
-    <p>¿Querés sumarte a la red de emprendedores?</p>
-    <a href="https://cafecito.app/docentesbrown" target="_blank">Unite con un Cafecito ☕</a>
-    <p>Luego, contactanos al: <strong>+54 9 11 2345-6789</strong></p>
-  </div>
+  <!-- Botón suscripción -->
+  <a id="subscribeBtn" href="https://wa.me/5491153196358?text=Hola,%20me%20contacto%20para%20suscribirme%20a%20la%20Feria%20de%20Emprendedores%20de%20la%20Educación" target="_blank">
+    + Suscribirme
+  </a>
 
   <script>
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFrFDHPl6jTxhAPO30GrSiWv5hzN_I9cGHRI8ks2UDQAoyPd15DG2zKlt3G0bkgyDwAufS2fLCqnat/pub?gid=0&single=true&output=csv";
 
     let data = [];
-
-    const rubroIcons = {
-      "Comida": "🍔",
-      "Ropa": "👕",
-      "Servicios": "💼",
-      "Artesanías": "🎨",
-      "Belleza": "💄",
-      "Educación": "📚",
-      "Tecnología": "💻",
-      "default": "⭐"
-    };
 
     async function loadData() {
       const res = await fetch(SHEET_URL);
@@ -264,25 +233,21 @@
 
     function renderRubros() {
       const container = document.getElementById("cards");
-      const back = document.getElementById("backContainer");
       container.className = "grid";
-      back.innerHTML = "";
       const rubros = [...new Set(data.map(d => d.rubro))].sort();
       container.innerHTML = rubros.map(r => `
-        <div class="card" onclick="renderEmprendedores('${r}')">
-          <h3>${rubroIcons[r] || rubroIcons.default} ${r}</h3>
+        <div class="card" onclick="navigateTo(() => renderEmprendedores('${r}'))">
+          <h3>${r}</h3>
         </div>
       `).join("");
     }
 
     function renderEmprendedores(rubro) {
       const container = document.getElementById("cards");
-      const back = document.getElementById("backContainer");
       container.className = "grid";
-      back.innerHTML = `<button class="back-btn" onclick="renderRubros()">← Volver a Rubros</button>`;
       const emps = data.filter(d => d.rubro === rubro).sort((a,b)=>a.emprendimiento.localeCompare(b.emprendimiento));
       container.innerHTML = emps.map(e => `
-        <div class="card" onclick="showModal('${e.emprendimiento}')">
+        <div class="card" onclick="navigateTo(() => showModal('${e.emprendimiento}'))">
           <h3>${e.emprendimiento}</h3>
         </div>
       `).join("");
@@ -290,12 +255,10 @@
 
     function renderEmprendedoresAll() {
       const container = document.getElementById("cards");
-      const back = document.getElementById("backContainer");
       container.className = "";
-      back.innerHTML = "";
       const emps = [...data].sort((a,b)=>a.emprendimiento.localeCompare(b.emprendimiento));
       container.innerHTML = emps.map(e => `
-        <div class="card horizontal" onclick="showModal('${e.emprendimiento}')">
+        <div class="card horizontal" onclick="navigateTo(() => showModal('${e.emprendimiento}'))">
           <h3>${e.emprendimiento}</h3>
         </div>
       `).join("");
@@ -313,17 +276,15 @@
       if (!empr) return;
       document.getElementById("modalName").textContent = empr.emprendimiento;
       document.getElementById("modalInsta").href = empr.instagram.startsWith("http") ? empr.instagram : `https://instagram.com/${empr.instagram.replace("@","")}`;
-      document.getElementById("modalWpp").href = buildWhatsAppLink(empr.whatsapp);
+      document.getElementById("modalWpp").href = empr.whatsapp.startsWith("http") ? empr.whatsapp : buildWhatsAppLink(empr.whatsapp);
       document.getElementById("modalDescuento").textContent = `Promoción: ${empr.descuento}`;
       document.getElementById("modalDocente").textContent = `Responsable: ${empr.docente}`;
       document.getElementById("modal").style.display = "flex";
     }
 
-    function closeModal() {
+    document.getElementById("closeModal").onclick = () => {
       document.getElementById("modal").style.display = "none";
-    }
-
-    document.getElementById("closeModal").onclick = closeModal;
+    };
 
     document.getElementById("filter").onchange = (e) => {
       if (e.target.value === "rubros") renderRubros();
@@ -332,14 +293,23 @@
 
     window.onclick = (e) => {
       if (e.target === document.getElementById("modal")) {
-        closeModal();
+        document.getElementById("modal").style.display = "none";
       }
     };
 
     document.getElementById("enterApp").onclick = () => {
       document.getElementById("startScreen").style.display = "none";
       document.getElementById("appContent").style.display = "block";
-      loadData();
+      navigateTo(loadData);
+    };
+
+    // Manejo de navegación hacia atrás
+    function navigateTo(action) {
+      action();
+      history.pushState({}, "");
+    }
+    window.onpopstate = () => {
+      renderRubros();
     };
   </script>
 </body>
