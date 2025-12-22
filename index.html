@@ -2,33 +2,34 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#FDFBF7">
+    <meta name="apple-mobile-web-app-title" content="Emprendedores">
+
     <title>Feria Docentes Brown</title>
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
     </style>
     
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
     <style>
         :root {
-            /* Paleta extraída del Logo */
-            --color-primary: #D6605E; /* Rojo Coral */
-            --color-dark: #1C3A56;    /* Azul Oscuro */
-            --color-light: #EBF5FB;   /* Celeste muy claro */
-            --color-bg: #FDFBF7;      /* Crema suave */
+            --color-primary: #D6605E; 
+            --color-dark: #1C3A56;
+            --color-light: #EBF5FB;
+            --color-bg: #FDFBF7;
             --color-white: #ffffff;
-            --color-gray: #8E8E93;    /* Gris Apple */
-            
-            /* Sombras estilo iOS */
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
-            
-            --radius-card: 20px;
-            --radius-btn: 12px;
+            --color-gray: #8E8E93;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+            --shadow-card: 0 4px 12px rgba(0,0,0,0.06);
+            --radius-card: 22px;
+            --radius-btn: 14px;
         }
 
         * {
@@ -37,210 +38,249 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
             background-color: var(--color-bg);
             color: var(--color-dark);
             margin: 0;
             padding: 0;
-            padding-bottom: 40px; /* Espacio para scroll */
+            /* Padding extra abajo para scroll en celulares */
+            padding-bottom: 80px; 
+            /* Previene rebote elástico feo en iOS al scrollear el body */
+            overscroll-behavior-y: none;
         }
 
-        /* --- Header --- */
+        /* --- Header Sticky con Blur --- */
         header {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(253, 251, 247, 0.85); /* Mismo tono que el fondo pero transp */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 15px 20px;
+            padding: 10px 20px 15px 20px;
             border-bottom: 1px solid rgba(0,0,0,0.05);
             text-align: center;
+            /* Ajuste para el Notch del iPhone */
+            padding-top: env(safe-area-inset-top); 
+        }
+
+        .header-content {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-top: 10px;
         }
 
         .logo-img {
-            width: 60px;
-            height: 60px;
+            width: 55px;
+            height: 55px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--color-primary);
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            box-shadow: var(--shadow-sm);
         }
 
         h1 {
-            font-size: 18px;
+            font-size: 17px;
             margin: 0;
             font-weight: 700;
-            letter-spacing: -0.5px;
             color: var(--color-dark);
         }
 
         p.subtitle {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--color-gray);
-            margin: 4px 0 0 0;
+            margin: 2px 0 0 0;
+            font-weight: 500;
         }
 
-        /* --- Filtros --- */
+        /* --- Filtros (Scroll Horizontal Suave) --- */
+        .filters-wrapper {
+            position: sticky;
+            top: 105px; /* Ajustado según la altura del header aprox */
+            z-index: 90;
+            background: linear-gradient(180deg, var(--color-bg) 0%, rgba(253,251,247,0) 100%);
+            padding-bottom: 10px;
+        }
+
         .filters-container {
-            padding: 20px;
+            padding: 10px 16px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             overflow-x: auto;
-            white-space: nowrap;
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -webkit-overflow-scrolling: touch; /* Scroll nativo iOS */
+            scrollbar-width: none;
         }
         
-        .filters-container::-webkit-scrollbar {
-            display: none;
-        }
+        .filters-container::-webkit-scrollbar { display: none; }
 
         select {
             appearance: none;
             background-color: var(--color-white);
-            border: 1px solid rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.08);
             color: var(--color-dark);
             font-size: 14px;
-            padding: 10px 35px 10px 15px;
+            padding: 12px 35px 12px 16px; /* Más padding para el dedo */
             border-radius: 50px;
             font-weight: 600;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231C3A56%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px top 50%;
-            background-size: 10px auto;
+            white-space: nowrap;
             box-shadow: var(--shadow-sm);
             outline: none;
+            /* Icono flechita */
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23D6605E%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 10px auto;
         }
 
-        /* --- Grid de Tarjetas --- */
+        /* --- Contenedor Principal --- */
         #app-container {
-            padding: 0 20px;
+            padding: 0 16px; /* Márgenes laterales de celular estándar */
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            max-width: 1200px;
+            /* En móvil 1 columna, en escritorio min 340px */
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); 
+            gap: 16px;
+            max-width: 1000px;
             margin: 0 auto;
         }
+        
+        /* Ajuste específico para celulares chicos */
+        @media (max-width: 600px) {
+            #app-container {
+                grid-template-columns: 1fr; /* Una sola columna obligada */
+            }
+            select {
+                font-size: 13px; /* Un poco más chico para que entren más */
+            }
+        }
 
-        /* --- Diseño de Tarjeta --- */
+        /* --- Tarjetas --- */
         .card {
             background: var(--color-white);
             border-radius: var(--radius-card);
-            padding: 20px;
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            border: 1px solid rgba(0,0,0,0.03);
+            padding: 22px;
+            box-shadow: var(--shadow-card);
+            border: 1px solid rgba(0,0,0,0.02);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+        /* Tira de color decorativa a la izquierda */
+        .card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: var(--color-primary);
+            opacity: 0.8;
         }
 
-        .card-header {
-            margin-bottom: 15px;
-        }
+        .card-header { margin-bottom: 18px; padding-left: 10px; }
 
         .rubro-tag {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
             background-color: var(--color-light);
-            color: var(--color-dark);
-            font-size: 10px;
+            color: var(--color-primary);
+            font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             font-weight: 700;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 4px 10px;
+            border-radius: 20px; /* Pill shape */
             margin-bottom: 8px;
         }
         
         .municipio-tag {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--color-gray);
             display: flex;
             align-items: center;
             gap: 4px;
-            margin-top: 4px;
+            margin-top: 6px;
         }
 
         .card-title {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
             margin: 0;
             color: var(--color-dark);
+            line-height: 1.2;
         }
 
         .card-owner {
             font-size: 14px;
             color: var(--color-gray);
             margin: 4px 0 0 0;
+            font-weight: 500;
         }
 
+        /* Botones Grandes para el Dedo */
         .card-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: auto;
+            padding-left: 10px;
         }
 
         .btn {
-            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            padding: 10px;
+            gap: 8px;
+            padding: 14px; /* Botón alto */
             border-radius: var(--radius-btn);
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             text-decoration: none;
-            transition: background 0.2s;
+            transition: transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.96); /* Efecto de click */
+            opacity: 0.9;
         }
 
         .btn-whatsapp {
             background-color: #25D366;
             color: white;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
         }
-        
-        .btn-whatsapp:hover { background-color: #1ebc57; }
 
         .btn-instagram {
             background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
             color: white;
+            box-shadow: 0 4px 10px rgba(220, 39, 67, 0.3);
         }
 
-        .btn-instagram:hover { opacity: 0.9; }
-
         .btn.disabled {
-            background-color: #f0f0f0;
-            color: #ccc;
+            background-color: #F2F2F7;
+            color: #C7C7CC;
+            box-shadow: none;
             pointer-events: none;
         }
 
-        /* --- Loading & Empty States --- */
         #loading {
+            padding: 60px 20px;
             text-align: center;
-            padding: 40px;
             color: var(--color-gray);
-            font-size: 14px;
         }
-
+        
         .spinner {
             border: 3px solid rgba(0,0,0,0.1);
             border-left-color: var(--color-primary);
             border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px auto;
+            width: 30px;
+            height: 30px;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 15px auto;
         }
-
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
     </style>
@@ -248,61 +288,49 @@
 <body>
 
     <header>
-        <img src="logoferia.jpg" alt="Logo Docentes Brown" class="logo-img" onerror="this.src='https://via.placeholder.com/60?text=DB'">
-        <h1>Emprendedores</h1>
-        <p class="subtitle">Docentes Brown</p>
+        <div class="header-content">
+            <img src="logoferia.jpg" alt="Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/60?text=DB'">
+            <h1>Emprendedores</h1>
+            <p class="subtitle">Docentes Brown</p>
+        </div>
     </header>
 
-    <div class="filters-container">
-        <select id="filter-rubro">
-            <option value="">Todos los Rubros</option>
+    <div class="filters-wrapper">
+        <div class="filters-container">
+            <select id="filter-rubro">
+                <option value="">Rubro: Todos</option>
             </select>
-        <select id="filter-municipio">
-            <option value="">Todos los Municipios</option>
+            <select id="filter-municipio">
+                <option value="">Zona: Todas</option>
             </select>
+        </div>
     </div>
 
     <div id="loading">
         <div class="spinner"></div>
-        <p>Cargando emprendimientos...</p>
+        <p>Cargando lista...</p>
     </div>
 
-    <div id="app-container">
-        </div>
+    <div id="app-container"></div>
 
     <script>
-        // URL de tu Google Sheet (Publicado como CSV)
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSq-4J73_54k3wuFJGiwgsYqVtOfPfHzuKTDRuJsyUq4IKtIEG7ttEMxJ7eP7HhQOkEZg5uS79q5lrV/pub?output=csv';
-
         let emprendimientos = [];
 
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            fetchData();
-        });
+        document.addEventListener('DOMContentLoaded', fetchData);
 
         function fetchData() {
             Papa.parse(SHEET_URL, {
                 download: true,
-                header: false, // Usamos false porque accederemos por índice (Col B=1, C=2...)
+                header: false,
                 complete: function(results) {
                     const rows = results.data;
-                    // Asumimos que la fila 0 son los encabezados, empezamos desde la 1
-                    // Indices según tu pedido:
-                    // B: Municipio (index 1)
-                    // C: Rubro (index 2)
-                    // D: Nombre Emprendimiento (index 3)
-                    // E: Nombre Responsable (index 4)
-                    // F: Usuario IG (index 5)
-                    // G: Celular (index 6)
-
-                    // Filtrar filas vacías o sin nombre de emprendimiento
                     emprendimientos = rows.slice(1).filter(row => row[3]).map(row => ({
                         municipio: row[1] ? row[1].trim() : "Sin dato",
                         rubro: row[2] ? row[2].trim() : "Varios",
                         nombre: row[3],
                         responsable: row[4],
-                        ig: row[5] ? row[5].replace('@', '').trim() : null,
+                        ig: row[5] ? row[5].replace('@', '').replace('https://instagram.com/','').replace(/\/$/, "").trim() : null,
                         celular: row[6] ? limpiarCelular(row[6]) : null
                     }));
 
@@ -310,60 +338,40 @@
                     renderCards(emprendimientos);
                     document.getElementById('loading').style.display = 'none';
                 },
-                error: function(err) {
-                    console.error("Error al leer CSV:", err);
-                    document.getElementById('loading').innerHTML = "<p>Hubo un error al cargar los datos.</p>";
+                error: (err) => {
+                    console.error(err);
+                    document.getElementById('loading').innerHTML = "Error de conexión.";
                 }
             });
         }
 
-        // Función auxiliar para limpiar número de Whatsapp (Formato Argentina)
         function limpiarCelular(numero) {
-            let limpio = numero.replace(/\D/g, ''); // Solo números
+            let limpio = numero.replace(/\D/g, '');
             if (limpio.length === 0) return null;
-            // Si no empieza con 54, asumimos que es local y lo agregamos (549...)
-            if (!limpio.startsWith('54')) {
-                return '549' + limpio;
-            }
-            return limpio;
+            return limpio.startsWith('54') ? limpio : '549' + limpio;
         }
 
         function populateFilters() {
             const rubros = [...new Set(emprendimientos.map(e => e.rubro))].sort();
             const municipios = [...new Set(emprendimientos.map(e => e.municipio))].sort();
 
-            const selectRubro = document.getElementById('filter-rubro');
-            const selectMunicipio = document.getElementById('filter-municipio');
+            const sRubro = document.getElementById('filter-rubro');
+            const sMuni = document.getElementById('filter-municipio');
 
-            rubros.forEach(r => {
-                let opt = document.createElement('option');
-                opt.value = r;
-                opt.textContent = r;
-                selectRubro.appendChild(opt);
-            });
+            rubros.forEach(r => sRubro.innerHTML += `<option value="${r}">${r}</option>`);
+            municipios.forEach(m => sMuni.innerHTML += `<option value="${m}">${m}</option>`);
 
-            municipios.forEach(m => {
-                let opt = document.createElement('option');
-                opt.value = m;
-                opt.textContent = m;
-                selectMunicipio.appendChild(opt);
-            });
+            const filtrar = () => {
+                const rVal = sRubro.value;
+                const mVal = sMuni.value;
+                const filtered = emprendimientos.filter(i => 
+                    (rVal === "" || i.rubro === rVal) && (mVal === "" || i.municipio === mVal)
+                );
+                renderCards(filtered);
+            };
 
-            // Event Listeners
-            selectRubro.addEventListener('change', filterData);
-            selectMunicipio.addEventListener('change', filterData);
-        }
-
-        function filterData() {
-            const rubroVal = document.getElementById('filter-rubro').value;
-            const muniVal = document.getElementById('filter-municipio').value;
-
-            const filtered = emprendimientos.filter(item => {
-                return (rubroVal === "" || item.rubro === rubroVal) &&
-                       (muniVal === "" || item.municipio === muniVal);
-            });
-
-            renderCards(filtered);
+            sRubro.addEventListener('change', filtrar);
+            sMuni.addEventListener('change', filtrar);
         }
 
         function renderCards(data) {
@@ -371,7 +379,7 @@
             container.innerHTML = '';
 
             if (data.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#888; width:100%;">No se encontraron resultados.</p>';
+                container.innerHTML = '<div style="text-align:center; color:#8E8E93; padding:40px;">No hay resultados con estos filtros.</div>';
                 return;
             }
 
@@ -379,28 +387,26 @@
                 const card = document.createElement('div');
                 card.className = 'card';
 
-                // Botones condicionales
-                let btnWapp = item.celular 
-                    ? `<a href="https://wa.me/${item.celular}" target="_blank" class="btn btn-whatsapp"><i class="ph ph-whatsapp-logo" style="font-size:18px;"></i> WhatsApp</a>`
-                    : `<span class="btn btn-whatsapp disabled"><i class="ph ph-whatsapp-logo"></i> No disp.</span>`;
+                const btnWapp = item.celular 
+                    ? `<a href="https://wa.me/${item.celular}" target="_blank" class="btn btn-whatsapp"><i class="ph-bold ph-whatsapp-logo"></i> WhatsApp</a>`
+                    : `<span class="btn disabled"><i class="ph-bold ph-whatsapp-logo"></i></span>`;
                 
-                let btnIg = item.ig 
-                    ? `<a href="https://instagram.com/${item.ig}" target="_blank" class="btn btn-instagram"><i class="ph ph-instagram-logo" style="font-size:18px;"></i> Instagram</a>`
-                    : `<span class="btn btn-instagram disabled"><i class="ph ph-instagram-logo"></i> No disp.</span>`;
+                const btnIg = item.ig 
+                    ? `<a href="https://instagram.com/${item.ig}" target="_blank" class="btn btn-instagram"><i class="ph-bold ph-instagram-logo"></i> Instagram</a>`
+                    : `<span class="btn disabled"><i class="ph-bold ph-instagram-logo"></i></span>`;
 
                 card.innerHTML = `
                     <div class="card-header">
                         <span class="rubro-tag">${item.rubro}</span>
                         <h2 class="card-title">${item.nombre}</h2>
-                        <p class="card-owner"><i class="ph ph-user"></i> ${item.responsable}</p>
-                        <div class="municipio-tag"><i class="ph ph-map-pin"></i> ${item.municipio}</div>
+                        <p class="card-owner">${item.responsable}</p>
+                        <div class="municipio-tag"><i class="ph-fill ph-map-pin" style="color:var(--color-primary)"></i> ${item.municipio}</div>
                     </div>
                     <div class="card-actions">
                         ${btnWapp}
                         ${btnIg}
                     </div>
                 `;
-
                 container.appendChild(card);
             });
         }
