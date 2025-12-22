@@ -1,316 +1,409 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Feria Virtual de Emprendedores</title>
-  <style>
-    :root {
-      --color1: #da6863;
-      --color2: #4d3069;
-      --color3: #24496e;
-      --color4: #f3efdc;
-      --shadow: rgba(0,0,0,0.2);
-    }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--color4);
-      color: var(--color3);
-    }
-    header {
-      background: var(--color2);
-      color: white;
-      padding: 15px;
-      text-align: center;
-    }
-    header img {
-      max-height: 70px;
-      display: block;
-      margin: 0 auto 10px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 1.5rem;
-    }
-    /* Pantalla de inicio con colores partidos */
-    .start-screen {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      background: var(--color4);
-      padding: 20px;
-    }
-    .start-screen button {
-      margin-top: 20px;
-      padding: 15px 30px;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 12px;
-      background: var(--color2);
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 4px 10px var(--shadow);
-      transition: transform 0.2s;
-    }
-    .start-screen button:hover {
-      transform: scale(1.05);
-    }
-    .filters {
-      display: flex;
-      justify-content: center;
-      margin: 15px;
-    }
-    .filters select {
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid var(--color2);
-      font-size: 1rem;
-      width: 90%;
-      max-width: 400px;
-    }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
-      padding: 10px;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 4px 12px var(--shadow);
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 6px 18px var(--shadow);
-    }
-    .card.horizontal {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      border-radius: 12px;
-      padding: 15px;
-      margin-bottom: 10px;
-      box-shadow: 0 4px 12px var(--shadow);
-    }
-    .card.horizontal h3 {
-      margin: 0 0 0 15px;
-      font-size: 1rem;
-    }
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1000;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-      padding: 10px;
-    }
-    .modal-content {
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      max-width: 350px;
-      width: 100%;
-      box-shadow: 0 6px 20px var(--shadow);
-      text-align: center;
-      position: relative;
-    }
-    .modal-content h2 {
-      margin-top: 0;
-      color: var(--color2);
-    }
-    .modal-content .btn {
-      display: block;
-      width: 90%;
-      padding: 12px 0;
-      margin: 10px 0;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      color: white;
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 1rem;
-    }
-    .btn-instagram { background: #E1306C; }
-    .btn-whatsapp { background: #25D366; }
-    .modal-content p {
-      margin: 10px 0;
-      font-weight: bold;
-      color: var(--color3);
-    }
-    .close {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--color1);
-    }
-    /* Botón flotante de suscripción */
-    #subscribeBtn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #25D366;
-      color: white;
-      padding: 15px 20px;
-      border-radius: 50px;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 4px 12px var(--shadow);
-      z-index: 2000;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Feria Docentes Brown</title>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    </style>
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <style>
+        :root {
+            /* Paleta extraída del Logo */
+            --color-primary: #D6605E; /* Rojo Coral */
+            --color-dark: #1C3A56;    /* Azul Oscuro */
+            --color-light: #EBF5FB;   /* Celeste muy claro */
+            --color-bg: #FDFBF7;      /* Crema suave */
+            --color-white: #ffffff;
+            --color-gray: #8E8E93;    /* Gris Apple */
+            
+            /* Sombras estilo iOS */
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            
+            --radius-card: 20px;
+            --radius-btn: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-dark);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 40px; /* Espacio para scroll */
+        }
+
+        /* --- Header --- */
+        header {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 18px;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--color-dark);
+        }
+
+        p.subtitle {
+            font-size: 13px;
+            color: var(--color-gray);
+            margin: 4px 0 0 0;
+        }
+
+        /* --- Filtros --- */
+        .filters-container {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            white-space: nowrap;
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+        
+        .filters-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        select {
+            appearance: none;
+            background-color: var(--color-white);
+            border: 1px solid rgba(0,0,0,0.1);
+            color: var(--color-dark);
+            font-size: 14px;
+            padding: 10px 35px 10px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231C3A56%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px top 50%;
+            background-size: 10px auto;
+            box-shadow: var(--shadow-sm);
+            outline: none;
+        }
+
+        /* --- Grid de Tarjetas --- */
+        #app-container {
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- Diseño de Tarjeta --- */
+        .card {
+            background: var(--color-white);
+            border-radius: var(--radius-card);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            margin-bottom: 15px;
+        }
+
+        .rubro-tag {
+            display: inline-block;
+            background-color: var(--color-light);
+            color: var(--color-dark);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .municipio-tag {
+            font-size: 11px;
+            color: var(--color-gray);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 4px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--color-dark);
+        }
+
+        .card-owner {
+            font-size: 14px;
+            color: var(--color-gray);
+            margin: 4px 0 0 0;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px;
+            border-radius: var(--radius-btn);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-whatsapp {
+            background-color: #25D366;
+            color: white;
+        }
+        
+        .btn-whatsapp:hover { background-color: #1ebc57; }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+        }
+
+        .btn-instagram:hover { opacity: 0.9; }
+
+        .btn.disabled {
+            background-color: #f0f0f0;
+            color: #ccc;
+            pointer-events: none;
+        }
+
+        /* --- Loading & Empty States --- */
+        #loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--color-gray);
+            font-size: 14px;
+        }
+
+        .spinner {
+            border: 3px solid rgba(0,0,0,0.1);
+            border-left-color: var(--color-primary);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px auto;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    </style>
 </head>
 <body>
-  <header>
-    <img src="logoferia.png" alt="Logo Feria">
-    <h1>Feria Virtual de Emprendedores</h1>
-  </header>
 
-  <div id="startScreen" class="start-screen">
-    <img src="logoferia.png" alt="Logo Feria" style="max-width:200px; margin-bottom:50px;">
-    <button id="enterApp">Ingresar a la App</button>
-  </div>
+    <header>
+        <img src="logoferia.jpg" alt="Logo Docentes Brown" class="logo-img" onerror="this.src='https://via.placeholder.com/60?text=DB'">
+        <h1>Emprendedores</h1>
+        <p class="subtitle">Docentes Brown</p>
+    </header>
 
-  <div id="appContent" style="display:none;">
-    <div class="filters">
-      <select id="filter">
-        <option value="rubros">Orden alfabético - Rubros</option>
-        <option value="emprendedores">Orden alfabético - Emprendedores</option>
-      </select>
+    <div class="filters-container">
+        <select id="filter-rubro">
+            <option value="">Todos los Rubros</option>
+            </select>
+        <select id="filter-municipio">
+            <option value="">Todos los Municipios</option>
+            </select>
     </div>
-    <div id="cards" class="grid"></div>
-  </div>
 
-  <!-- Modal -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span id="closeModal" class="close">&times;</span>
-      <h2 id="modalName"></h2>
-      <a id="modalInsta" class="btn btn-instagram" href="#" target="_blank">Instagram</a>
-      <a id="modalWpp" class="btn btn-whatsapp" href="#" target="_blank">WhatsApp</a>
-      <p id="modalDescuento"></p>
-      <p id="modalDocente"></p>
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Cargando emprendimientos...</p>
     </div>
-  </div>
 
-  <!-- Botón suscripción -->
-  <a id="subscribeBtn" href="https://wa.me/5491153196358?text=Hola,%20me%20contacto%20para%20suscribirme%20a%20la%20Feria%20de%20Emprendedores%20de%20la%20Educación" target="_blank">
-    + Suscribirme
-  </a>
-
-  <script>
-    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTFrFDHPl6jTxhAPO30GrSiWv5hzN_I9cGHRI8ks2UDQAoyPd15DG2zKlt3G0bkgyDwAufS2fLCqnat/pub?gid=0&single=true&output=csv";
-
-    let data = [];
-
-    async function loadData() {
-      const res = await fetch(SHEET_URL);
-      const text = await res.text();
-      const rows = text.split("\n").map(r => r.split(","));
-      data = rows.slice(1).map(r => ({
-        emprendimiento: r[0]?.trim(),
-        rubro: r[1]?.trim(),
-        instagram: r[2]?.trim(),
-        whatsapp: r[3]?.trim(),
-        descuento: r[4]?.trim(),
-        docente: r[5]?.trim()
-      })).filter(d => d.emprendimiento);
-      renderRubros();
-    }
-
-    function renderRubros() {
-      const container = document.getElementById("cards");
-      container.className = "grid";
-      const rubros = [...new Set(data.map(d => d.rubro))].sort();
-      container.innerHTML = rubros.map(r => `
-        <div class="card" onclick="navigateTo(() => renderEmprendedores('${r}'))">
-          <h3>${r}</h3>
+    <div id="app-container">
         </div>
-      `).join("");
-    }
 
-    function renderEmprendedores(rubro) {
-      const container = document.getElementById("cards");
-      container.className = "grid";
-      const emps = data.filter(d => d.rubro === rubro).sort((a,b)=>a.emprendimiento.localeCompare(b.emprendimiento));
-      container.innerHTML = emps.map(e => `
-        <div class="card" onclick="navigateTo(() => showModal('${e.emprendimiento}'))">
-          <h3>${e.emprendimiento}</h3>
-        </div>
-      `).join("");
-    }
+    <script>
+        // URL de tu Google Sheet (Publicado como CSV)
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSq-4J73_54k3wuFJGiwgsYqVtOfPfHzuKTDRuJsyUq4IKtIEG7ttEMxJ7eP7HhQOkEZg5uS79q5lrV/pub?output=csv';
 
-    function renderEmprendedoresAll() {
-      const container = document.getElementById("cards");
-      container.className = "";
-      const emps = [...data].sort((a,b)=>a.emprendimiento.localeCompare(b.emprendimiento));
-      container.innerHTML = emps.map(e => `
-        <div class="card horizontal" onclick="navigateTo(() => showModal('${e.emprendimiento}'))">
-          <h3>${e.emprendimiento}</h3>
-        </div>
-      `).join("");
-    }
+        let emprendimientos = [];
 
-    function buildWhatsAppLink(number) {
-      if (!number) return "#";
-      number = number.replace(/[^0-9]/g, "");
-      if (!number.startsWith("549")) number = "549" + number;
-      return `https://wa.me/${number}`;
-    }
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
+        });
 
-    function showModal(name) {
-      const empr = data.find(d => d.emprendimiento === name);
-      if (!empr) return;
-      document.getElementById("modalName").textContent = empr.emprendimiento;
-      document.getElementById("modalInsta").href = empr.instagram.startsWith("http") ? empr.instagram : `https://instagram.com/${empr.instagram.replace("@","")}`;
-      document.getElementById("modalWpp").href = empr.whatsapp.startsWith("http") ? empr.whatsapp : buildWhatsAppLink(empr.whatsapp);
-      document.getElementById("modalDescuento").textContent = `Promoción: ${empr.descuento}`;
-      document.getElementById("modalDocente").textContent = `Responsable: ${empr.docente}`;
-      document.getElementById("modal").style.display = "flex";
-    }
+        function fetchData() {
+            Papa.parse(SHEET_URL, {
+                download: true,
+                header: false, // Usamos false porque accederemos por índice (Col B=1, C=2...)
+                complete: function(results) {
+                    const rows = results.data;
+                    // Asumimos que la fila 0 son los encabezados, empezamos desde la 1
+                    // Indices según tu pedido:
+                    // B: Municipio (index 1)
+                    // C: Rubro (index 2)
+                    // D: Nombre Emprendimiento (index 3)
+                    // E: Nombre Responsable (index 4)
+                    // F: Usuario IG (index 5)
+                    // G: Celular (index 6)
 
-    document.getElementById("closeModal").onclick = () => {
-      document.getElementById("modal").style.display = "none";
-    };
+                    // Filtrar filas vacías o sin nombre de emprendimiento
+                    emprendimientos = rows.slice(1).filter(row => row[3]).map(row => ({
+                        municipio: row[1] ? row[1].trim() : "Sin dato",
+                        rubro: row[2] ? row[2].trim() : "Varios",
+                        nombre: row[3],
+                        responsable: row[4],
+                        ig: row[5] ? row[5].replace('@', '').trim() : null,
+                        celular: row[6] ? limpiarCelular(row[6]) : null
+                    }));
 
-    document.getElementById("filter").onchange = (e) => {
-      if (e.target.value === "rubros") renderRubros();
-      else renderEmprendedoresAll();
-    };
+                    populateFilters();
+                    renderCards(emprendimientos);
+                    document.getElementById('loading').style.display = 'none';
+                },
+                error: function(err) {
+                    console.error("Error al leer CSV:", err);
+                    document.getElementById('loading').innerHTML = "<p>Hubo un error al cargar los datos.</p>";
+                }
+            });
+        }
 
-    window.onclick = (e) => {
-      if (e.target === document.getElementById("modal")) {
-        document.getElementById("modal").style.display = "none";
-      }
-    };
+        // Función auxiliar para limpiar número de Whatsapp (Formato Argentina)
+        function limpiarCelular(numero) {
+            let limpio = numero.replace(/\D/g, ''); // Solo números
+            if (limpio.length === 0) return null;
+            // Si no empieza con 54, asumimos que es local y lo agregamos (549...)
+            if (!limpio.startsWith('54')) {
+                return '549' + limpio;
+            }
+            return limpio;
+        }
 
-    document.getElementById("enterApp").onclick = () => {
-      document.getElementById("startScreen").style.display = "none";
-      document.getElementById("appContent").style.display = "block";
-      navigateTo(loadData);
-    };
+        function populateFilters() {
+            const rubros = [...new Set(emprendimientos.map(e => e.rubro))].sort();
+            const municipios = [...new Set(emprendimientos.map(e => e.municipio))].sort();
 
-    // Manejo de navegación hacia atrás
-    function navigateTo(action) {
-      action();
-      history.pushState({}, "");
-    }
-    window.onpopstate = () => {
-      renderRubros();
-    };
-  </script>
+            const selectRubro = document.getElementById('filter-rubro');
+            const selectMunicipio = document.getElementById('filter-municipio');
+
+            rubros.forEach(r => {
+                let opt = document.createElement('option');
+                opt.value = r;
+                opt.textContent = r;
+                selectRubro.appendChild(opt);
+            });
+
+            municipios.forEach(m => {
+                let opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                selectMunicipio.appendChild(opt);
+            });
+
+            // Event Listeners
+            selectRubro.addEventListener('change', filterData);
+            selectMunicipio.addEventListener('change', filterData);
+        }
+
+        function filterData() {
+            const rubroVal = document.getElementById('filter-rubro').value;
+            const muniVal = document.getElementById('filter-municipio').value;
+
+            const filtered = emprendimientos.filter(item => {
+                return (rubroVal === "" || item.rubro === rubroVal) &&
+                       (muniVal === "" || item.municipio === muniVal);
+            });
+
+            renderCards(filtered);
+        }
+
+        function renderCards(data) {
+            const container = document.getElementById('app-container');
+            container.innerHTML = '';
+
+            if (data.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#888; width:100%;">No se encontraron resultados.</p>';
+                return;
+            }
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+
+                // Botones condicionales
+                let btnWapp = item.celular 
+                    ? `<a href="https://wa.me/${item.celular}" target="_blank" class="btn btn-whatsapp"><i class="ph ph-whatsapp-logo" style="font-size:18px;"></i> WhatsApp</a>`
+                    : `<span class="btn btn-whatsapp disabled"><i class="ph ph-whatsapp-logo"></i> No disp.</span>`;
+                
+                let btnIg = item.ig 
+                    ? `<a href="https://instagram.com/${item.ig}" target="_blank" class="btn btn-instagram"><i class="ph ph-instagram-logo" style="font-size:18px;"></i> Instagram</a>`
+                    : `<span class="btn btn-instagram disabled"><i class="ph ph-instagram-logo"></i> No disp.</span>`;
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="rubro-tag">${item.rubro}</span>
+                        <h2 class="card-title">${item.nombre}</h2>
+                        <p class="card-owner"><i class="ph ph-user"></i> ${item.responsable}</p>
+                        <div class="municipio-tag"><i class="ph ph-map-pin"></i> ${item.municipio}</div>
+                    </div>
+                    <div class="card-actions">
+                        ${btnWapp}
+                        ${btnIg}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+    </script>
 </body>
 </html>
