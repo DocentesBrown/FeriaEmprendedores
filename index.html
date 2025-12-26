@@ -23,21 +23,20 @@
     
     <style>
         :root {
-            /* Paleta Refinada */
-            --primary: #D6605E; 
-            --primary-dark: #b84e4c;
+            /* Colores de Marca */
+            --primary: #D6605E; /* Coral original */
+            --primary-soft: #FFF5F5; /* Coral muy suave para fondo de tarjeta */
+            --primary-border: #F8D7D6; /* Borde coral suave */
+            
             --dark: #1C3A56;
-            --bg-body: #F2F4F8; /* Gris azulado suave, más moderno */
-            --surface: #ffffff;
-            --text-main: #1f2937;
-            --text-sec: #6b7280;
+            --bg-body: #F9FAFC; 
+            --text-main: #2D1A1A; /* Un gris oscuro con toque cálido para leer mejor sobre el coral */
+            --text-sec: #6E5C5C;
             
             /* UI Elements */
             --radius-card: 24px;
             --radius-btn: 16px;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-float: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+            --shadow-sm: 0 2px 8px rgba(214, 96, 94, 0.08); /* Sombra con tinte coral */
         }
 
         * {
@@ -56,9 +55,9 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- Header Moderno --- */
+        /* --- Header --- */
         header {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             position: sticky;
@@ -67,7 +66,6 @@
             padding: 12px 20px;
             border-bottom: 1px solid rgba(0,0,0,0.05);
             padding-top: max(12px, env(safe-area-inset-top)); 
-            box-shadow: var(--shadow-sm);
         }
 
         .header-content {
@@ -79,8 +77,8 @@
         }
 
         .logo-img {
-            width: 48px; 
-            height: 48px;
+            width: 50px; 
+            height: 50px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid var(--primary);
@@ -107,22 +105,27 @@
             font-weight: 500;
         }
 
-        .update-badge {
+        /* AVISO DE DEMORA RESTAURADO */
+        .refresh-notice {
             font-size: 10px;
-            background: #FEF2F2;
+            background-color: rgba(214, 96, 94, 0.1);
             color: var(--primary);
             padding: 4px 8px;
-            border-radius: 20px;
+            border-radius: 6px;
+            margin-top: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            width: fit-content;
             font-weight: 600;
-            white-space: nowrap;
         }
 
-        /* --- Filtros Estilo "Pill" --- */
+        /* --- Filtros --- */
         .filters-wrapper {
             position: sticky;
-            top: 73px; 
+            top: 75px; 
             z-index: 90;
-            background: linear-gradient(180deg, var(--bg-body) 60%, rgba(242,244,248,0) 100%);
+            background: linear-gradient(180deg, var(--bg-body) 60%, rgba(249,250,252,0) 100%);
             padding: 12px 0 20px 0;
         }
 
@@ -141,7 +144,7 @@
 
         select {
             appearance: none;
-            background-color: var(--surface);
+            background-color: #ffffff;
             border: 1px solid rgba(0,0,0,0.08);
             color: var(--dark);
             font-size: 14px;
@@ -149,19 +152,13 @@
             border-radius: 50px;
             font-weight: 600;
             white-space: nowrap;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
             outline: none;
-            transition: all 0.2s;
-            /* Icono de flecha custom */
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%231C3A56%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+            /* Flecha personalizada */
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23D6605E%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat;
             background-position: right 12px center;
             background-size: 10px auto;
-        }
-        
-        select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(214, 96, 94, 0.2);
         }
 
         /* --- Grid & Cards --- */
@@ -169,40 +166,55 @@
             padding: 0 16px;
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-            gap: 20px;
+            gap: 16px;
             max-width: 1000px;
             margin: 0 auto;
         }
 
         .card {
-            background: var(--surface);
+            /* CAMBIO CLAVE: Fondo Coral Suave */
+            background: var(--primary-soft);
+            border: 1px solid var(--primary-border);
+            
             border-radius: var(--radius-card);
-            padding: 20px;
+            padding: 22px;
             box-shadow: var(--shadow-sm);
-            border: 1px solid rgba(255,255,255,0.5);
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decoración opcional para reforzar el coral */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; bottom: 0;
+            width: 4px;
+            background-color: var(--primary);
+            opacity: 0.6;
         }
 
         .card:active {
             transform: scale(0.99);
         }
 
-        .card-header { margin-bottom: 20px; }
+        .card-header { margin-bottom: 20px; padding-left: 8px; }
 
         .rubro-badge {
             display: inline-flex;
             align-items: center;
-            background-color: #EBF5FF;
-            color: var(--dark);
+            background-color: rgba(255,255,255, 0.8);
+            color: var(--primary);
             font-size: 10px;
             text-transform: uppercase;
             letter-spacing: 0.8px;
-            font-weight: 700;
-            padding: 6px 10px;
+            font-weight: 800;
+            padding: 5px 10px;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            border: 1px solid rgba(214, 96, 94, 0.1);
         }
 
         .card-title {
@@ -227,13 +239,11 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            margin-top: 12px;
-            font-size: 13px;
+            margin-top: 10px;
+            font-size: 12px;
             color: var(--text-sec);
-            background: #F9FAFB;
-            padding: 6px 10px;
-            border-radius: 8px;
-            width: fit-content;
+            opacity: 0.8;
+            font-weight: 500;
         }
 
         /* --- Botones --- */
@@ -242,6 +252,7 @@
             grid-template-columns: 1fr 1fr; 
             gap: 12px; 
             margin-top: auto; 
+            padding-left: 8px;
         }
 
         .btn {
@@ -257,6 +268,7 @@
             transition: all 0.2s;
             border: none;
             cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         
         .btn:active { transform: scale(0.96); opacity: 0.9; }
@@ -267,21 +279,16 @@
         }
         
         .btn-instagram { 
-            /* Gradiente clásico de IG */
             background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
             color: white; 
         }
         
         .btn.disabled { 
-            background-color: #F3F4F6; 
-            color: #D1D5DB; 
+            background-color: rgba(0,0,0,0.05); 
+            color: #aaa; 
+            box-shadow: none;
             pointer-events: none; 
         }
-
-        /* --- Loading & Empty States --- */
-        #loading { padding: 80px 20px; text-align: center; color: var(--text-sec); }
-        .spinner { border: 3px solid rgba(214, 96, 94, 0.1); border-left-color: var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto 15px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* --- Footer Flotante --- */
         .fixed-footer {
@@ -298,7 +305,7 @@
             display: block;
             width: 100%;
             background-color: var(--dark);
-            color: var(--surface);
+            color: #ffffff;
             text-align: center;
             text-decoration: none;
             padding: 16px;
@@ -311,6 +318,11 @@
         
         .btn-cta-main:active { transform: scale(0.98); }
 
+        /* --- Loading --- */
+        #loading { padding: 80px 20px; text-align: center; color: var(--text-sec); }
+        .spinner { border: 3px solid rgba(214, 96, 94, 0.1); border-left-color: var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto 15px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
@@ -321,9 +333,7 @@
             <div class="header-text">
                 <h1>Docentes Brown</h1>
                 <p class="subtitle">Feria de Emprendedores</p>
-            </div>
-            <div class="update-badge">
-                <i class="ph-bold ph-lightning"></i> En vivo
+                <span class="refresh-notice"><i class="ph-bold ph-clock"></i> Actualización demora 5 min</span>
             </div>
         </div>
     </header>
@@ -357,8 +367,6 @@
         const SHEET_URL = BASE_SHEET_URL + '&cache_buster=' + new Date().getTime();
 
         let emprendimientos = [];
-
-        // Detectar si es móvil para optimizar links
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
         document.addEventListener('DOMContentLoaded', fetchData);
@@ -427,21 +435,13 @@
                 const card = document.createElement('div');
                 card.className = 'card';
 
-                // Lógica de WhatsApp
                 const btnWapp = item.celular 
                     ? `<a href="https://wa.me/${item.celular}" target="_blank" class="btn btn-whatsapp"><i class="ph-bold ph-whatsapp-logo"></i> WhatsApp</a>`
                     : `<span class="btn disabled"><i class="ph-bold ph-whatsapp-logo"></i> WhatsApp</span>`;
                 
-                // Lógica de Instagram (Deep Linking)
                 let igLink = '#';
                 if (item.ig) {
-                    if (isMobile) {
-                        // Intenta abrir la app
-                        igLink = `instagram://user?username=${item.ig}`;
-                    } else {
-                        // Web normal para PC
-                        igLink = `https://www.instagram.com/${item.ig}`;
-                    }
+                    igLink = isMobile ? `instagram://user?username=${item.ig}` : `https://www.instagram.com/${item.ig}`;
                 }
 
                 const btnIg = item.ig 
