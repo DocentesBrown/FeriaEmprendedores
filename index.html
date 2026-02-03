@@ -1,467 +1,461 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <meta name="apple-mobile-web-app-title" content="Docentes Brown">
-    <meta name="application-name" content="Docentes Brown">
-    <meta name="theme-color" content="#ffffff">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docentes Brown | Nueva Plataforma</title>
 
-    <link rel="apple-touch-icon" href="logoferia.jpg">
-    <link rel="icon" type="image/jpeg" href="logoferia.jpg">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-    <title>Feria Docentes Brown</title>
-    
-    <style>
-        :root {
-            /* Colores de Marca */
-            --primary: #D6605E; /* Coral original */
-            --primary-soft: #FFF5F5; /* Coral muy suave para fondo de tarjeta */
-            --primary-border: #F8D7D6; /* Borde coral suave */
-            
-            --dark: #1C3A56;
-            --bg-body: #F9FAFC; 
-            --text-main: #2D1A1A; /* Un gris oscuro con toque cálido para leer mejor sobre el coral */
-            --text-sec: #6E5C5C;
-            
-            /* UI Elements */
-            --radius-card: 24px;
-            --radius-btn: 16px;
-            --shadow-sm: 0 2px 8px rgba(214, 96, 94, 0.08); /* Sombra con tinte coral */
-        }
+  <style>
+    :root{
+      --bg1:#0f2a44;
+      --bg2:#1c4b7a;
+      --card: rgba(255,255,255,.08);
+      --cardBorder: rgba(255,255,255,.14);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.75);
+      --accent1:#00e0ff;
+      --accent2:#00b4d8;
+      --dark:#003c4a;
+      --shadow: 0 24px 70px rgba(0,0,0,.35);
+      --radius: 22px;
+    }
 
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(0,224,255,.12), transparent 60%),
+                  radial-gradient(900px 600px at 80% 70%, rgba(255,255,255,.08), transparent 55%),
+                  linear-gradient(135deg, var(--bg1), var(--bg2));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      overflow:hidden;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            margin: 0;
-            padding: 0;
-            padding-bottom: 140px; 
-            overscroll-behavior-y: none;
-            -webkit-font-smoothing: antialiased;
-        }
+    /* ====== Soft floating blobs ====== */
+    .blob{
+      position:absolute;
+      inset:auto;
+      width:520px;height:520px;
+      border-radius:50%;
+      filter: blur(40px);
+      opacity:.22;
+      background: radial-gradient(circle at 30% 30%, var(--accent1), transparent 55%),
+                  radial-gradient(circle at 70% 70%, rgba(255,255,255,.18), transparent 60%);
+      animation: floaty 10s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .blob.b2{
+      width:420px;height:420px;
+      opacity:.16;
+      left:-120px; bottom:-140px;
+      animation-duration: 12s;
+    }
+    .blob.b1{
+      right:-140px; top:-120px;
+    }
+    @keyframes floaty{
+      0%,100%{transform: translateY(0) translateX(0) scale(1)}
+      50%{transform: translateY(18px) translateX(-10px) scale(1.03)}
+    }
 
-        /* --- Header --- */
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            padding: 12px 20px;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            padding-top: max(12px, env(safe-area-inset-top)); 
-        }
+    /* ====== Card ====== */
+    .wrap{
+      width: min(560px, 100%);
+      position:relative;
+      z-index:2;
+    }
+    .card{
+      background: var(--card);
+      border: 1px solid var(--cardBorder);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 34px 26px 22px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      overflow:hidden;
+    }
 
-        .header-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+    /* ====== Top progress bar ====== */
+    .bar{
+      position:absolute;
+      top:0; left:0;
+      height:4px;
+      width:100%;
+      background: rgba(255,255,255,.10);
+    }
+    .bar > i{
+      display:block;
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      box-shadow: 0 0 18px rgba(0,224,255,.55);
+      transition: width 300ms linear;
+    }
 
-        .logo-img {
-            width: 50px; 
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--primary);
-        }
+    /* ====== Header ====== */
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:16px;
+    }
+    .brand img{
+      width:58px;
+      height:58px;
+      object-fit:contain;
+      border-radius:16px;
+      background: rgba(255,255,255,.08);
+      padding:8px;
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+    }
+    .brand .t{
+      line-height:1.05;
+    }
+    .brand .t .name{
+      font-weight:800;
+      letter-spacing:.4px;
+      font-size:18px;
+    }
+    .brand .t .tag{
+      margin-top:6px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      font-weight:700;
+      color: rgba(0,0,0,.75);
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      padding:7px 12px;
+      border-radius:999px;
+      width: fit-content;
+    }
+    .dot{
+      width:8px;height:8px;border-radius:50%;
+      background: rgba(0,0,0,.35);
+    }
 
-        .header-text {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-        }
+    h1{
+      font-size: 28px;
+      line-height:1.15;
+      margin: 6px 0 12px;
+      letter-spacing: -.3px;
+    }
+    p{
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.6;
+      margin-bottom: 18px;
+    }
 
-        h1 {
-            font-size: 18px;
-            margin: 0;
-            font-weight: 800;
-            color: var(--dark);
-            letter-spacing: -0.5px;
-        }
+    .highlight{
+      color: rgba(255,255,255,.92);
+      font-weight:700;
+    }
 
-        p.subtitle {
-            font-size: 12px;
-            color: var(--text-sec);
-            margin: 2px 0 0 0;
-            font-weight: 500;
-        }
+    /* ====== Buttons ====== */
+    .actions{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top: 10px;
+    }
+    .btn{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width:100%;
+      padding: 15px 14px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 16.5px;
+      text-decoration:none;
+      border: none;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      color: var(--dark);
+      box-shadow: 0 14px 30px rgba(0,224,255,.35);
+    }
+    .btn.primary:hover{ transform: translateY(-2px); box-shadow: 0 18px 38px rgba(0,224,255,.48); }
+    .btn.secondary{
+      background: rgba(255,255,255,.09);
+      color: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .btn.secondary:hover{ transform: translateY(-1px); filter: brightness(1.06); }
 
-        /* AVISO DE DEMORA RESTAURADO */
-        .refresh-notice {
-            font-size: 10px;
-            background-color: rgba(214, 96, 94, 0.1);
-            color: var(--primary);
-            padding: 4px 8px;
-            border-radius: 6px;
-            margin-top: 4px;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            width: fit-content;
-            font-weight: 600;
-        }
+    /* ====== Footer info ====== */
+    .meta{
+      margin-top: 16px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      font-size: 12.5px;
+      color: rgba(255,255,255,.72);
+    }
+    .pillrow{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .pill{
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.12);
+      width: fit-content;
+    }
 
-        /* --- Filtros --- */
-        .filters-wrapper {
-            position: sticky;
-            top: 75px; 
-            z-index: 90;
-            background: linear-gradient(180deg, var(--bg-body) 60%, rgba(249,250,252,0) 100%);
-            padding: 12px 0 20px 0;
-        }
+    /* ====== Loading overlay ====== */
+    .overlay{
+      position: fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: radial-gradient(900px 500px at 30% 20%, rgba(0,224,255,.14), transparent 60%),
+                  linear-gradient(135deg, rgba(10,18,30,.92), rgba(18,44,70,.92));
+      z-index: 9999;
+      transition: opacity .35s ease, visibility .35s ease;
+    }
+    .overlay.hidden{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .loaderBox{
+      width:min(520px, 92%);
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 20px;
+      padding: 28px 22px;
+      box-shadow: var(--shadow);
+      text-align:center;
+      backdrop-filter: blur(10px);
+    }
+    .loaderTitle{
+      font-weight:900;
+      font-size: 18px;
+      letter-spacing: .3px;
+      margin-bottom: 8px;
+    }
+    .loaderSub{
+      color: rgba(255,255,255,.72);
+      font-size: 13.5px;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+    .spinner{
+      width:42px;height:42px;
+      border-radius:50%;
+      border: 3px solid rgba(255,255,255,.22);
+      border-top-color: var(--accent1);
+      margin: 0 auto 12px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin{ to{ transform: rotate(360deg);} }
 
-        .filters-container {
-            padding: 0 16px;
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-        
-        .filters-container::-webkit-scrollbar { display: none; }
+    .miniBar{
+      width:100%;
+      height:10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.10);
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .miniBar > i{
+      display:block;
+      height:100%;
+      width: 22%;
+      border-radius:999px;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      animation: sweep 1.2s ease-in-out infinite;
+    }
+    @keyframes sweep{
+      0%{ transform: translateX(-20%); width: 22%; opacity:.85;}
+      50%{ transform: translateX(170%); width: 38%; opacity:1;}
+      100%{ transform: translateX(320%); width: 22%; opacity:.85;}
+    }
 
-        select {
-            appearance: none;
-            background-color: #ffffff;
-            border: 1px solid rgba(0,0,0,0.08);
-            color: var(--dark);
-            font-size: 14px;
-            padding: 10px 32px 10px 16px;
-            border-radius: 50px;
-            font-weight: 600;
-            white-space: nowrap;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-            outline: none;
-            /* Flecha personalizada */
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23D6605E%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 10px auto;
-        }
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important; transition:none!important;}
+    }
 
-        /* --- Grid & Cards --- */
-        #app-container {
-            padding: 0 16px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-            gap: 16px;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .card {
-            /* CAMBIO CLAVE: Fondo Coral Suave */
-            background: var(--primary-soft);
-            border: 1px solid var(--primary-border);
-            
-            border-radius: var(--radius-card);
-            padding: 22px;
-            box-shadow: var(--shadow-sm);
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.2s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Decoración opcional para reforzar el coral */
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; bottom: 0;
-            width: 4px;
-            background-color: var(--primary);
-            opacity: 0.6;
-        }
-
-        .card:active {
-            transform: scale(0.99);
-        }
-
-        .card-header { margin-bottom: 20px; padding-left: 8px; }
-
-        .rubro-badge {
-            display: inline-flex;
-            align-items: center;
-            background-color: rgba(255,255,255, 0.8);
-            color: var(--primary);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            font-weight: 800;
-            padding: 5px 10px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-            border: 1px solid rgba(214, 96, 94, 0.1);
-        }
-
-        .card-title {
-            font-size: 20px; 
-            font-weight: 800; 
-            margin: 0 0 6px 0; 
-            color: var(--dark); 
-            line-height: 1.3;
-        }
-
-        .card-owner {
-            font-size: 14px; 
-            color: var(--text-sec); 
-            margin: 0; 
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .location-info {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin-top: 10px;
-            font-size: 12px;
-            color: var(--text-sec);
-            opacity: 0.8;
-            font-weight: 500;
-        }
-
-        /* --- Botones --- */
-        .card-actions {
-            display: grid; 
-            grid-template-columns: 1fr 1fr; 
-            gap: 12px; 
-            margin-top: auto; 
-            padding-left: 8px;
-        }
-
-        .btn {
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 8px; 
-            padding: 12px; 
-            border-radius: var(--radius-btn); 
-            font-size: 14px; 
-            font-weight: 600; 
-            text-decoration: none; 
-            transition: all 0.2s;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        
-        .btn:active { transform: scale(0.96); opacity: 0.9; }
-        
-        .btn-whatsapp { 
-            background-color: #25D366; 
-            color: white; 
-        }
-        
-        .btn-instagram { 
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); 
-            color: white; 
-        }
-        
-        .btn.disabled { 
-            background-color: rgba(0,0,0,0.05); 
-            color: #aaa; 
-            box-shadow: none;
-            pointer-events: none; 
-        }
-
-        /* --- Footer Flotante --- */
-        .fixed-footer {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 400px;
-            z-index: 200;
-        }
-
-        .btn-cta-main {
-            display: block;
-            width: 100%;
-            background-color: var(--dark);
-            color: #ffffff;
-            text-align: center;
-            text-decoration: none;
-            padding: 16px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(28, 58, 86, 0.3);
-            transition: transform 0.2s;
-        }
-        
-        .btn-cta-main:active { transform: scale(0.98); }
-
-        /* --- Loading --- */
-        #loading { padding: 80px 20px; text-align: center; color: var(--text-sec); }
-        .spinner { border: 3px solid rgba(214, 96, 94, 0.1); border-left-color: var(--primary); border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto 15px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    </style>
+    @media (max-width:480px){
+      .card{ padding: 28px 18px 18px; }
+      h1{ font-size: 24px; }
+      .brand img{ width:52px; height:52px; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
 
-    <header>
-        <div class="header-content">
-            <img src="logoferia.jpg" alt="Logo" class="logo-img" onerror="this.src='https://via.placeholder.com/70?text=DB'">
-            <div class="header-text">
-                <h1>Feria de Emprendedores de la Educación</h1>
-                <p class="subtitle">App creada y optimizada por Docente Brown</p>
-                <span class="refresh-notice"><i class="ph-bold ph-clock"></i> Actualización demora 3 min</span>
-            </div>
-        </div>
-    </header>
-
-    <div class="filters-wrapper">
-        <div class="filters-container">
-            <select id="filter-rubro">
-                <option value="">🛍️ Rubro: Todos</option>
-            </select>
-            <select id="filter-municipio">
-                <option value="">📍 Zona: Todas</option>
-            </select>
-        </div>
+  <!-- Loading / Welcome -->
+  <div class="overlay" id="overlay">
+    <div class="loaderBox">
+      <div class="spinner" aria-hidden="true"></div>
+      <div class="loaderTitle">DOCENTES BROWN</div>
+      <div class="loaderSub">Estamos cargando y llevándote a la plataforma oficial…</div>
+      <div class="miniBar" aria-hidden="true"><i></i></div>
     </div>
+  </div>
 
-    <div id="loading">
-        <div class="spinner"></div>
-        <p>Cargando emprendimientos...</p>
-    </div>
+  <main class="wrap">
+    <section class="card" role="region" aria-label="Redirección a la nueva aplicación">
+      <div class="bar" aria-hidden="true"><i id="topProgress"></i></div>
 
-    <div id="app-container"></div>
+      <div class="brand">
+        <!-- Logo real: poné LOGO.png en la misma carpeta que este index.html -->
+        <img src="LOGO.png" alt="Logo Docentes Brown" onerror="this.style.display='none'">
+        <div class="t">
+          <div class="name">DOCENTES BROWN</div>
+          <div class="tag"><span class="dot"></span> Plataforma Oficial</div>
+        </div>
+      </div>
 
-    <div class="fixed-footer">
-        <a href="https://forms.gle/Sqmwvwxbq8cvmuAJ6" target="_blank" class="btn-cta-main">
-            <i class="ph-bold ph-plus-circle"></i> Sumá tu emprendimiento
+      <h1>🚀 Nuestras apps se mudaron</h1>
+      <p>
+        Ahora todo funciona desde un único lugar: <span class="highlight">más rápido</span>, más simple y con mejores herramientas.
+        Para no perderte nada, te llevamos a la nueva web en <span class="highlight" id="count">5</span> segundos.
+      </p>
+
+      <div class="actions">
+        <a class="btn primary" id="goBtn" href="https://docentesbrown-oficial.github.io/Docentes-Brown-Oficial/" rel="noopener">
+          Ir a la nueva aplicación
+          <span aria-hidden="true">→</span>
         </a>
-    </div>
 
-    <script>
-        const BASE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSq-4J73_54k3wuFJGiwgsYqVtOfPfHzuKTDRuJsyUq4IKtIEG7ttEMxJ7eP7HhQOkEZg5uS79q5lrV/pub?output=csv';
-        const SHEET_URL = BASE_SHEET_URL + '&cache_buster=' + new Date().getTime();
+        <button class="btn secondary" id="stayBtn" type="button">
+          Quiero quedarme acá por ahora
+        </button>
+      </div>
 
-        let emprendimientos = [];
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      <div class="meta">
+        <div class="pillrow">
+          <div class="pill">✅ Enlace oficial verificado</div>
+          <div class="pill">📱 Optimizado para celular</div>
+          <div class="pill">⚡ Redirección automática</div>
+        </div>
+        <div>
+          Si ya entraste antes, la próxima vez te redirigimos casi al instante para que no pierdas tiempo.
+        </div>
+      </div>
+    </section>
+  </main>
 
-        document.addEventListener('DOMContentLoaded', fetchData);
+  <script>
+    (function () {
+      const NEW_URL = "https://docentesbrown-oficial.github.io/Docentes-Brown-Oficial/";
+      const KEY = "db_redirect_seen_v1";
 
-        function fetchData() {
-            Papa.parse(SHEET_URL, {
-                download: true, header: false,
-                complete: function(results) {
-                    const rows = results.data;
-                    emprendimientos = rows.slice(1).filter(row => row[3]).map(row => ({
-                        municipio: row[1] ? row[1].trim() : "Sin dato",
-                        rubro: row[2] ? row[2].trim() : "Varios",
-                        nombre: row[3],
-                        responsable: row[4],
-                        ig: row[5] ? row[5].replace('@', '').replace('https://instagram.com/','').replace(/\/$/, "").trim() : null,
-                        celular: row[6] ? limpiarCelular(row[6]) : null
-                    }));
-                    populateFilters();
-                    renderCards(emprendimientos);
-                    document.getElementById('loading').style.display = 'none';
-                },
-                error: (err) => {
-                    console.error(err);
-                    document.getElementById('loading').innerHTML = "Error de conexión.";
-                }
-            });
+      const overlay = document.getElementById("overlay");
+      const countEl = document.getElementById("count");
+      const goBtn = document.getElementById("goBtn");
+      const stayBtn = document.getElementById("stayBtn");
+      const topProgress = document.getElementById("topProgress");
+
+      let redirectTimer = null;
+      let countdownTimer = null;
+
+      function safeSetSeen() {
+        try { localStorage.setItem(KEY, "1"); } catch (e) {}
+      }
+
+      function hasSeen() {
+        try { return localStorage.getItem(KEY) === "1"; } catch (e) { return false; }
+      }
+
+      function hideOverlaySoon(ms) {
+        setTimeout(() => overlay.classList.add("hidden"), ms);
+      }
+
+      function goNow() {
+        safeSetSeen();
+        window.location.replace(NEW_URL);
+      }
+
+      function startCountdown(seconds) {
+        let s = seconds;
+        countEl.textContent = String(s);
+        topProgress.style.width = "0%";
+
+        const totalMs = seconds * 1000;
+        const start = Date.now();
+
+        // Barra superior animada
+        const barTick = setInterval(() => {
+          const elapsed = Date.now() - start;
+          const pct = Math.min(100, (elapsed / totalMs) * 100);
+          topProgress.style.width = pct.toFixed(1) + "%";
+          if (pct >= 100) clearInterval(barTick);
+        }, 120);
+
+        countdownTimer = setInterval(() => {
+          s -= 1;
+          if (s <= 0) {
+            clearInterval(countdownTimer);
+            goNow();
+            return;
+          }
+          countEl.textContent = String(s);
+        }, 1000);
+
+        redirectTimer = setTimeout(goNow, totalMs);
+      }
+
+      function cancelAutoRedirect() {
+        if (redirectTimer) clearTimeout(redirectTimer);
+        if (countdownTimer) clearInterval(countdownTimer);
+        topProgress.style.width = "0%";
+        countEl.textContent = "—";
+      }
+
+      // Botón: ir ahora
+      goBtn.addEventListener("click", () => safeSetSeen());
+
+      // Botón: quedarse
+      stayBtn.addEventListener("click", () => {
+        cancelAutoRedirect();
+        safeSetSeen(); // guardamos igual para que no moleste si vuelve
+        stayBtn.textContent = "Perfecto. Cuando quieras, usá el botón para ir.";
+      });
+
+      // UX: si ya entró antes -> redirección casi instantánea
+      if (hasSeen()) {
+        // overlay cortito para que no “parpadee”
+        hideOverlaySoon(220);
+        setTimeout(goNow, 600);
+      } else {
+        // primer ingreso: pequeña carga + countdown visible
+        hideOverlaySoon(900);
+        startCountdown(5);
+      }
+
+      // Fallback: si la pestaña vuelve a primer plano, reintentar countdown si corresponde
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible" && !hasSeen()) {
+          // no reiniciamos si ya fue cancelado (count = "—")
+          if (countEl.textContent !== "—" && !redirectTimer) startCountdown(5);
         }
-
-        function limpiarCelular(numero) {
-            let limpio = numero.replace(/\D/g, '');
-            if (limpio.length === 0) return null;
-            return limpio.startsWith('54') ? limpio : '549' + limpio;
-        }
-
-        function populateFilters() {
-            const rubros = [...new Set(emprendimientos.map(e => e.rubro))].sort();
-            const municipios = [...new Set(emprendimientos.map(e => e.municipio))].sort();
-            const sRubro = document.getElementById('filter-rubro');
-            const sMuni = document.getElementById('filter-municipio');
-
-            rubros.forEach(r => sRubro.innerHTML += `<option value="${r}">${r}</option>`);
-            municipios.forEach(m => sMuni.innerHTML += `<option value="${m}">${m}</option>`);
-
-            const filtrar = () => {
-                const rVal = sRubro.value;
-                const mVal = sMuni.value;
-                const filtered = emprendimientos.filter(i => 
-                    (rVal === "" || i.rubro === rVal) && (mVal === "" || i.municipio === mVal)
-                );
-                renderCards(filtered);
-            };
-            sRubro.addEventListener('change', filtrar);
-            sMuni.addEventListener('change', filtrar);
-        }
-
-        function renderCards(data) {
-            const container = document.getElementById('app-container');
-            container.innerHTML = '';
-            
-            if (data.length === 0) {
-                container.innerHTML = '<div style="text-align:center; color:#8E8E93; padding:40px; grid-column: 1/-1;">No encontramos resultados con esos filtros.</div>';
-                return;
-            }
-
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'card';
-
-                const btnWapp = item.celular 
-                    ? `<a href="https://wa.me/${item.celular}" target="_blank" class="btn btn-whatsapp"><i class="ph-bold ph-whatsapp-logo"></i> WhatsApp</a>`
-                    : `<span class="btn disabled"><i class="ph-bold ph-whatsapp-logo"></i> WhatsApp</span>`;
-                
-                let igLink = '#';
-                if (item.ig) {
-                    igLink = isMobile ? `instagram://user?username=${item.ig}` : `https://www.instagram.com/${item.ig}`;
-                }
-
-                const btnIg = item.ig 
-                    ? `<a href="${igLink}" target="_blank" class="btn btn-instagram"><i class="ph-bold ph-instagram-logo"></i> Instagram</a>`
-                    : `<span class="btn disabled"><i class="ph-bold ph-instagram-logo"></i> Instagram</span>`;
-
-                card.innerHTML = `
-                    <div class="card-header">
-                        <span class="rubro-badge">${item.rubro}</span>
-                        <h2 class="card-title">${item.nombre}</h2>
-                        <p class="card-owner"><i class="ph-fill ph-user"></i> ${item.responsable}</p>
-                        <div class="location-info">
-                            <i class="ph-fill ph-map-pin" style="color:var(--primary)"></i> ${item.municipio}
-                        </div>
-                    </div>
-                    <div class="card-actions">${btnWapp}${btnIg}</div>
-                `;
-                container.appendChild(card);
-            });
-        }
-    </script>
+      });
+    })();
+  </script>
 </body>
 </html>
